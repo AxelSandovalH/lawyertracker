@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "WebFetch(domain:www.twilio.com)",
+      "Bash(npm install *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({**d.get\\('dependencies',{}\\), **d.get\\('devDependencies',{}\\)}, indent=2\\)\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001)",
+      "Bash(xargs ls *)",
+      "Bash(sort -k5 -rn)",
+      "Bash(file \"C:/Users/axesa/AppData/Local/Temp/02550ba8-bf9a-4430-bb9d-45c8004e76a5.tmp\" ls -la \"C:/Users/axesa/AppData/Local/Temp/\"*.tmp)",
+      "Bash(grep -iE \"\\\\.\\(jpg|jpeg|png|avif|webp\\)$\")",
+      "Bash(sort -k8 -r)",
+      "Bash(python3 -c \"from PIL import Image; print\\('PIL ok'\\)\")",
+      "Bash(mv \"piña.jpg\" \"pina.jpg\")",
+      "Bash(mv \"piña-hero.jpg\" \"pina-hero.jpg\")",
+      "Bash(cat)",
+      "Read(//tmp/**)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)"
+    ]
+  }
+}
