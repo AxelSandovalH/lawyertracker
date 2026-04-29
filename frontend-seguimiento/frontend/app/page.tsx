@@ -1535,7 +1535,7 @@ const s: Record<string, any> = {
   breadcrumb: { margin: "2px 0 0", fontSize: 11, color: "#1e4080" },
   contentWrap:{ flex: 1, overflowY: "auto" as const, padding: "20px 28px 32px", display: "flex", flexDirection: "column", gap: 16 },
 
-  kpiGrid:    { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 12 },
+  kpiGrid:    { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 },
   dashSection:{ background: "#0c1525", border: "1px solid #152035", borderRadius: 14, padding: "16px 18px", display: "flex", flexDirection: "column", gap: 10 },
   dashSectionTitle: { fontSize: 12, fontWeight: 700, color: "#475569", textTransform: "uppercase" as const, letterSpacing: ".5px", marginBottom: 4 },
   dashCaseRow:{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: "#060c18", borderRadius: 10, borderLeft: "3px solid", cursor: "pointer" },
