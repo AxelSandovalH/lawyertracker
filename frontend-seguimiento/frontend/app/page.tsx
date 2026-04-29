@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
@@ -446,10 +447,12 @@ function NuevoExpedienteForm({ clients, newCase, setNewCase, selectedClient, sel
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Home() {
+  const router = useRouter();
   const [cases, setCases]         = useState<CaseType[]>([]);
   const [clients, setClients]     = useState<Client[]>([]);
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [user, setUser]           = useState<any>(null);
+  const [authChecked, setAuthChecked] = useState(false);
 
   const [activeNav, setActiveNav]       = useState("dashboard");
   const [sidebarOpen, setSidebarOpen]   = useState(true);
@@ -495,7 +498,14 @@ export default function Home() {
   };
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) {
+        router.replace("/login");
+      } else {
+        setUser(data.user);
+      }
+      setAuthChecked(true);
+    });
     return () => { if (toastRef.current) clearTimeout(toastRef.current); };
   }, []);
 
@@ -710,6 +720,8 @@ export default function Home() {
     overdue: { label: "Vencido",   bg: "#2a1010", color: "#f87171" },
     sent:    { label: "Enviado",   bg: "#052e16", color: "#4ade80" },
   };
+
+  if (!authChecked) return null;
 
   return (
     <div style={s.root}>
