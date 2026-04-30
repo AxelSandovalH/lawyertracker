@@ -453,6 +453,14 @@ export default function Home() {
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [user, setUser]           = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [isMobile, setIsMobile]   = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const [activeNav, setActiveNav]       = useState("dashboard");
   const [sidebarOpen, setSidebarOpen]   = useState(true);
@@ -734,7 +742,7 @@ export default function Home() {
       )}
 
       {/* ── SIDEBAR ── */}
-      <aside style={{ ...s.sidebar, width: sidebarOpen ? 240 : 66 }}>
+      <aside style={{ ...s.sidebar, width: isMobile ? 0 : sidebarOpen ? 240 : 66 }}>
         <div style={s.sidebarHeader}>
           {sidebarOpen ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -854,22 +862,22 @@ export default function Home() {
 
       {/* ── MAIN ── */}
       <main style={s.main}>
-        <header style={s.topbar}>
+        <header style={{ ...s.topbar, padding: isMobile ? "12px 16px 10px" : "18px 28px 14px" }}>
           <div>
-            <h1 style={s.pageTitle}>{navItems.find(n => n.id === activeNav)?.label}</h1>
-            <div style={s.breadcrumb}>LawyerTracker › {navItems.find(n => n.id === activeNav)?.label}</div>
+            <h1 style={{ ...s.pageTitle, fontSize: isMobile ? 17 : 20 }}>{navItems.find(n => n.id === activeNav)?.label}</h1>
+            {!isMobile && <div style={s.breadcrumb}>LawyerTracker › {navItems.find(n => n.id === activeNav)?.label}</div>}
           </div>
           {loading && <span style={{ fontSize: 12, color: "#475569" }}>⏳ Actualizando…</span>}
         </header>
 
-        <div style={s.contentWrap}>
+        <div style={{ ...s.contentWrap, padding: isMobile ? "14px 14px 90px" : "20px 28px 32px" }}>
 
           {/* ══════ DASHBOARD ══════ */}
           {activeNav === "dashboard" && (
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
               {/* KPI Grid */}
-              <div style={s.kpiGrid}>
+              <div style={{ ...s.kpiGrid, gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(3,1fr)" }}>
                 <KPI icon="🔴" label="CASOS CRÍTICOS" value={criticalCases.length} color="#f87171" bg="#450a0a" border="#991b1b"
                   sub={criticalCases.length > 0 ? criticalCases.slice(0,2).map(c=>c.title).join(", ") : "Ninguno"} onClick={() => { setActiveNav("casos"); setCaseFilter("critico"); }} />
                 <KPI icon="🟠" label="URGENTES (≤3 DH)" value={urgentCases.length} color="#fdba74" bg="#431407" border="#c2410c"
@@ -1467,6 +1475,25 @@ export default function Home() {
             </>
           )}
         </div>
+
+        {/* ── BOTTOM NAV (mobile only) ── */}
+        {isMobile && (
+          <nav style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#09111f", borderTop: "1px solid #131f33", display: "flex", justifyContent: "space-around", padding: "8px 0 12px", zIndex: 100 }}>
+            {[
+              { id: "dashboard",    icon: "📊", label: "Inicio" },
+              { id: "casos",        icon: "⚖️", label: "Casos" },
+              { id: "casos_nuevo",  icon: "➕", label: "Nuevo" },
+              { id: "clientes",     icon: "👥", label: "Clientes" },
+              { id: "recordatorios",icon: "🔔", label: "Alertas" },
+            ].map(item => (
+              <button key={item.id} onClick={() => setActiveNav(item.id)}
+                style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, background: "none", border: "none", cursor: "pointer", padding: "4px 12px", borderRadius: 10, color: activeNav === item.id ? "#60a5fa" : "#475569" }}>
+                <span style={{ fontSize: 20 }}>{item.icon}</span>
+                <span style={{ fontSize: 9, fontWeight: activeNav === item.id ? 700 : 400 }}>{item.label}</span>
+              </button>
+            ))}
+          </nav>
+        )}
       </main>
     </div>
   );
